@@ -84,11 +84,11 @@
 
           <div class="col-code">
             <h2><span class="flow-text">Code</span></h2>
-            {{#code-block language='javascript'}}// Brocfile.js
+            {{#code-block language='javascript'}}// ember-cli-build.js
 
-var app = new EmberAddon({
+let app = new EmberApp({
 
-  intlTelInput: {
+  'ember-intl-tel-input': {
     includeUtilsScript: true, // default to false
   },
 
