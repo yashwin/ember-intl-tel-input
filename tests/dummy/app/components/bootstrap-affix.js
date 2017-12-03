@@ -1,6 +1,8 @@
-import Ember from 'ember';
+import Component from '@ember/component';
+import { computed } from '@ember/object';
+import $ from 'jquery';
 
-export default Ember.Component.extend({
+export default Component.extend({
 
   /**
    * @property after
@@ -26,11 +28,11 @@ export default Ember.Component.extend({
    * @property offsetTopFunc
    * @type Function
    */
-  offsetTopFunc: Ember.computed('after', function() {
+  offsetTopFunc: computed('after', function() {
     var self = this;
 
     return function() {
-      var $after = Ember.$(self.get('after')).eq(0);
+      var $after = $(self.get('after')).eq(0);
 
       if (0 === $after.length) {
         return self.get('initialOffsetTop');
@@ -51,8 +53,8 @@ export default Ember.Component.extend({
    * @property affixedOffsetTop
    * @type Number
    */
-  affixedOffsetTop: Ember.computed('after', function() {
-    var $after = Ember.$(this.get('after')).eq(0);
+  affixedOffsetTop: computed('after', function() {
+    var $after = $(this.get('after')).eq(0);
 
     if (0 === $after.length) {
       return this.get('offsetTop');
