@@ -46,7 +46,7 @@ test('properties', function(assert) {
     autoFormat: 'auto format',
     autoHideDialCode: 'auto hide dial code',
     autoPlaceholder: 'auto placeholder',
-    defaultCountry: 'us',
+    initialCountry: 'us',
     geoIpLookup: 'geo ip lookup',
     nationalMode: 'national mode',
     numberType: 'MOBILE',
@@ -61,7 +61,7 @@ test('properties', function(assert) {
       autoFormat: 'auto format',
       autoHideDialCode: 'auto hide dial code',
       autoPlaceholder: 'auto placeholder',
-      defaultCountry: 'us',
+      initialCountry: 'us',
       geoIpLookup: 'geo ip lookup',
       nationalMode: 'national mode',
       numberType: 'MOBILE',
@@ -112,7 +112,7 @@ test('selectedCountryData', function(assert) {
 
   var component = this.subject();
   component.set('onlyCountries', ['us']);
-  component.set('defaultCountry', 'us');
+  component.set('initialCountry', 'us');
   this.render();
 
   assert.deepEqual(component.get('selectedCountryData'), {

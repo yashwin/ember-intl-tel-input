@@ -18,6 +18,7 @@ const warn = (message) => {
 
 const defaultOptions = {
   includeUtilsScript: false,
+  utilsScript: 'assets/intl-tel-input/js/utils.js',
   exportFlagsImages: true,
   cssVariables: {
     hoverColor: null,
@@ -50,20 +51,23 @@ const defaultOptions = {
   }
 };
 
+const variablesToExport = ['includeUtilsScript', 'utilsScript'];
+
 module.exports = {
   name: 'ember-intl-tel-input',
 
   included(app, parentAddon) {
     this._super.included.apply(this, arguments);
-    let target = (parentAddon || app);
 
+    let target = (parentAddon || app);
     let options = target.options['ember-intl-tel-input'];
 
     this._options = defaultsDeep(options, defaultOptions);
 
     if (this._options.exportFlagsImages) {
       if (this._options.cssVariables.flagsImageName || this._options.cssVariables.flagsImageExtension) {
-        console.warn(warn(`${chalk.bold("cssVariables.flagsImageName")} and ${chalk.bold("cssVariables.flagsImageExtension")} options will be ignored due ${chalk.bold("exportFlagsImages")} is ${chalk.green("true")}`));
+        this.ui.writeLine(warn(`${chalk.bold("cssVariables.flagsImageName")} and ${chalk.bold("cssVariables.flagsImageExtension")}
+         options will be ignored due ${chalk.bold("exportFlagsImages")} is ${chalk.green("true")}`));
       }
       this._options.cssVariables.flagsImageName = null;
       this._options.cssVariables.flagsImageExtension = null;
@@ -77,16 +81,23 @@ module.exports = {
     this._scssString = this.createScssStringWithVariables(this._options.cssVariables);
     this._shouldBuildCss = this._scssString !== null;
 
+    this._jsOptionsString = this.createJsOptionsString(this._options);
+    this._jsOptionsFilename = 'ember-intl-tel-input/variables.js';
+
     if (this._options.includeUtilsScript) {
-      target.import('vendor/intl-tel-input/js/utils.js');
+      target.import('vendor/intl-tel-input/js/utils.js', {
+        outputFile: this._options.utilsScript
+      });
     }
+
+    target.import(`vendor/${this._jsOptionsFilename}`);
 
     target.import({
       development: 'vendor/intl-tel-input/js/intlTelInput.js',
       production: 'vendor/intl-tel-input/js/intlTelInput.min.js'
     });
 
-    target.import('vendor/intl-tel-input/css/intlTelInput.css')
+    target.import('vendor/intl-tel-input/css/intlTelInput.css');
   },
 
   createScssStringWithVariables(cssVariables) {
@@ -108,6 +119,16 @@ module.exports = {
     }
   },
 
+  createJsOptionsString(options) {
+    let fileString = 'window.emberIntlTelInputConfig={';
+    variablesToExport.forEach((variable) => {
+      fileString += `${variable}:${JSON.stringify(options[variable])},`;
+    });
+    fileString = fileString.substr(0, fileString.length - 1);
+    fileString += '};'
+    return fileString;
+  },
+
   treeForVendor(vendorTree) {
     let trees = [];
     if (vendorTree) {
@@ -119,6 +140,8 @@ module.exports = {
       include: [/js\/.*\.js$/],
     });
     trees.push(intlTelInputJsTree);
+
+    trees.push(createFile(this._jsOptionsFilename, this._jsOptionsString));
 
     let intlTelInputCssTree;
     if (this._shouldBuildCss) {

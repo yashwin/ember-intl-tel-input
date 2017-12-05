@@ -52,7 +52,7 @@
 
           <div class="col-result">
             <h2><span class="flow-text">Result</span></h2>
-            {{intl-tel-input autoFormat=false autoPlaceholder=false}}
+            {{intl-tel-input autoPlaceholder=false}}
           </div>
 
         </div>{{!-- /.row --}}
@@ -68,7 +68,7 @@
 
           <div class="col-result">
             <h2><span class="flow-text">Result</span></h2>
-            {{intl-tel-input autoFormat=false autoPlaceholder=false value="555-5555"}}
+            {{intl-tel-input autoPlaceholder=false value="555-5555"}}
           </div>
 
         </div>{{!-- /.row --}}
@@ -79,21 +79,36 @@
         <h1><span class="flow-text">With Utilities Script</span></h1>
         <hr />
 
-        <p>With the <a href="https://github.com/Bluefieldscom/intl-tel-input#utilities-script" target="_blank">utilities script</a> included, the {{#code-inline}}autoFormat{{/code-inline}} and {{#code-inline}}autoPlaceholder{{/code-inline}} options are automatically enabled. The rest of the examples assume the utilities script is included.</p>
+        <p>With the <a href="https://github.com/jackocnr/intl-tel-input#utilities-script" target="_blank">utilities script</a> included, the {{#code-inline}}autoPlaceholder{{/code-inline}} option is automatically enabled. The rest of the examples assume the utilities script is included.</p>
 
         <div class="row sample">
 
           <div class="col-code">
             <h2><span class="flow-text">Code</span></h2>
             {{#code-block language='javascript'}}// ember-cli-build.js
-
-let app = new EmberApp({
-
-  'ember-intl-tel-input': {
-    includeUtilsScript: true, // default to false
-  },
-
-});{{/code-block}}
+module.exports = function(defaults) {
+  let app = new EmberApp(defaults, {
+    ...
+    'ember-intl-tel-input': {
+      includeUtilsScript: true, // default to false
+    },
+    ...
+  });
+  ...
+};{{/code-block}}
+            Or if you want to specify your own compatible utils script (like a custom build).
+            {{#code-block language='javascript'}}// ember-cli-build.js
+module.exports = function(defaults) {
+  let app = new EmberApp(defaults, {
+    ...
+    'ember-intl-tel-input': {
+      utilsScript: 'path/to/utilsScript.js',
+    },
+    ...
+  });
+  ...
+};{{/code-block}}
+            If you use both options the default utilsScript will be exported to the path specified.
             {{#code-block language='handlebars'}}\{{intl-tel-input}}{{/code-block}}
           </div>
 
@@ -177,7 +192,7 @@ let app = new EmberApp({
         <h1><span class="flow-text">Lookup User's Country</span></h1>
         <hr />
 
-        <p>{{#code-inline}}intl-tel-input{{/code-inline}} provides a convenient way to look up the user's country based on their IP addresses. This example uses <a href="http://www.telize.com/">Telize</a> for demonstration.</p>
+        <p>{{#code-inline}}intl-tel-input{{/code-inline}} provides a convenient way to look up the user's country based on their IP addresses. This example uses <a href="http://ipinfo.io/" target="_blank">ipinfo.io</a> for demonstration.</p>
 
         <div class="row sample">
 
@@ -197,13 +212,13 @@ geoIpLookupFunc: function(callback) {
 }
 ...{{/code-block}}
             {{#code-block language='handlebars'}}\{{intl-tel-input
-  defaultCountry="auto"
+  initialCountry="auto"
   geoIpLookup=geoIpLookupFunc}}{{/code-block}}
           </div>
 
           <div class="col-result">
             <h2><span class="flow-text">Result</span></h2>
-            {{intl-tel-input defaultCountry="auto" geoIpLookup=geoIpLookupFunc}}
+            {{intl-tel-input initialCountry="auto" geoIpLookup=geoIpLookupFunc}}
           </div>
 
         </div>{{!-- /.row --}}
