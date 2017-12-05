@@ -1,20 +1,21 @@
 # ember-intl-tel-input
 
-[![Build Status](https://travis-ci.org/justin-lau/ember-intl-tel-input.svg?branch=master)](https://travis-ci.org/justin-lau/ember-intl-tel-input)
-[![npm version](https://badge.fury.io/js/ember-intl-tel-input.svg)](http://badge.fury.io/js/ember-intl-tel-input)
-[![Dependency Status](https://david-dm.org/justin-lau/ember-intl-tel-input.svg)](https://david-dm.org/justin-lau/ember-intl-tel-input)
-[![devDependency Status](https://david-dm.org/justin-lau/ember-intl-tel-input/dev-status.svg)](https://david-dm.org/justin-lau/ember-intl-tel-input#info=devDependencies)
+[![Build Status](https://travis-ci.org/cdatehortuab/ember-intl-tel-input.svg?branch=master)](https://travis-ci.org/cdatehortuab/ember-intl-tel-input)
+[![npm version](https://badge.fury.io/js/ember-intl-tel-input2.svg)](http://badge.fury.io/js/ember-intl-tel-input2)
+[![Dependency Status](https://david-dm.org/cdatehortuab/ember-intl-tel-input.svg)](https://david-dm.org/cdatehortuab/ember-intl-tel-input)
+[![devDependency Status](https://david-dm.org/cdatehortuab/ember-intl-tel-input/dev-status.svg)](https://david-dm.org/cdatehortuab/ember-intl-tel-input#info=devDependencies)
 
 An Ember.js addon for entering and validating international telephone numbers.
+This project is a fork of [justin-lau/ember-intl-tel-input](https://github.com/justin-lau/ember-intl-tel-input) that is outdated.
 
-Please check out the [demo page](http://justin-lau.github.io/ember-intl-tel-input/) to see the addon in action.
+Please check out the [demo page](http://cdatehortuab.github.io/ember-intl-tel-input/) to see the addon in action.
 
 For more information on using ember-cli, visit [http://www.ember-cli.com/](http://www.ember-cli.com/).
 
 ## Installation
 
 ```bash
-$ ember install ember-intl-tel-input
+$ ember install ember-intl-tel-input2
 ```
 
 ## Basic Usage
@@ -38,8 +39,8 @@ With the [utilities script](https://github.com/Bluefieldscom/intl-tel-input#util
 ```javascript
 // ember-cli-build.js
 module.exports = function(defaults) {
-  var app = new EmberAddon(defaults, {
-    intlTelInput: {
+  let app = new EmberApp(defaults, {
+    ['ember-intl-tel-input']: {
       includeUtilsScript: true, // default to false
     },
   });
@@ -79,9 +80,9 @@ Use the following properties for binding:
 
 ```javascript
 // controller
-
+...
 geoIpLookupFunc: function(callback) {
-  $.getJSON('//www.telize.com/geoip')
+  $.getJSON('http://ipinfo.io/')
    .always(function(resp) {
      if (!resp || !resp.country_code) {
        callback('');
@@ -90,6 +91,7 @@ geoIpLookupFunc: function(callback) {
      callback(resp.country_code);
    });
 }
+...
 ```
 
 ```htmlbars
@@ -113,7 +115,7 @@ The original jQuery plugin also depends on several other open-source libraries:
 * Formatting/validation/example number code from Google's libphonenumber
 * Lookup user's country using ipinfo.io
 
-~~This [addon's demo page](http://justin-lau.github.io/ember-intl-tel-input/) uses [Telize](http://www.telize.com/) for a fast, SSL-supported, yet FREE Geo IP service.~~
+~~This [addon's demo page](http://cdatehortuab.github.io/ember-intl-tel-input/) uses [Telize](http://www.telize.com/) for a fast, SSL-supported, yet FREE Geo IP service.~~
 
 [Telize no longer provide free services due to heavy abuse](http://www.cambus.net/adventures-in-running-a-free-public-api/). The demo has switched over to [ipinfo.io](http://ipinfo.io).
 

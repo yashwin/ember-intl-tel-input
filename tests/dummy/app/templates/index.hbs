@@ -1,19 +1,20 @@
 <div class="jumbotron">
   <div class="container">
     <h1 class="text-center">
-      <span class="flow-text">International Telephone Input</span><br/>
+      <span class="flow-text">International Telephone Input 2</span><br/>
       <small><span class="flow-text">Ember Addon</span></small>
     </h1>
     <div class="row">
       <div class="col-sm-10 col-sm-offset-1">
         <p class="lead text-center">
           <span class="flow-text">An Ember.js addon for entering and validating international telephone numbers.</span>
+          <span class="flow-text">This project is a fork of <a href="https://github.com/justin-lau/ember-intl-tel-input" target="_blank">justin-lau/ember-intl-tel-input</a> that is outdated.</span>
         </p>
       </div>
     </div>
     <div class="row text-center">
       <!-- <button class="btn btn-sm btn-default">github</button> -->
-      <a href="https://github.com/justin-lau/ember-intl-tel-input"><span class="fa fa-5x fa-github"></span></a>
+      <a href="https://github.com/cdatehortuab/ember-intl-tel-input"><span class="fa fa-5x fa-github"></span></a>
     </div>
   </div>
 </div>{{!-- /.jumbotron --}}
@@ -56,7 +57,7 @@
 
         </div>{{!-- /.row --}}
 
-        <p>The component derives from <a href="http://emberjs.com/api/classes/Ember.TextField.html">{{#code-inline}}Ember.TextField{{/code-inline}}</a>, anything you can do with the input helper can also be done with this component.</p>
+        <p>The component derives from <a href="https://emberjs.com/api/ember/2.17/classes/TextField" target="_blank">{{#code-inline}}Ember.TextField{{/code-inline}}</a>, anything you can do with the input helper can also be done with this component.</p>
 
         <div class="row sample">
 
@@ -78,17 +79,17 @@
         <h1><span class="flow-text">With Utilities Script</span></h1>
         <hr />
 
-        <p>With the <a href="https://github.com/Bluefieldscom/intl-tel-input#utilities-script">utilities script</a> included, the {{#code-inline}}autoFormat{{/code-inline}} and {{#code-inline}}autoPlaceholder{{/code-inline}} options are automatically enabled. The rest of the examples assume the utilities script is included.</p>
+        <p>With the <a href="https://github.com/Bluefieldscom/intl-tel-input#utilities-script" target="_blank">utilities script</a> included, the {{#code-inline}}autoFormat{{/code-inline}} and {{#code-inline}}autoPlaceholder{{/code-inline}} options are automatically enabled. The rest of the examples assume the utilities script is included.</p>
 
         <div class="row sample">
 
           <div class="col-code">
             <h2><span class="flow-text">Code</span></h2>
-            {{#code-block language='javascript'}}// Brocfile.js
+            {{#code-block language='javascript'}}// ember-cli-build.js
 
-var app = new EmberAddon({
+let app = new EmberApp({
 
-  intlTelInput: {
+  'ember-intl-tel-input': {
     includeUtilsScript: true, // default to false
   },
 
@@ -183,9 +184,9 @@ var app = new EmberAddon({
           <div class="col-code">
             <h2><span class="flow-text">Code</span></h2>
             {{#code-block language='javascript'}}// controller
-
+...
 geoIpLookupFunc: function(callback) {
-  $.getJSON('//www.telize.com/geoip')
+  $.getJSON('http://ipinfo.io/')
    .always(function(resp) {
      if (!resp || !resp.country_code) {
        callback('');
@@ -193,7 +194,8 @@ geoIpLookupFunc: function(callback) {
 
      callback(resp.country_code);
    });
-}{{/code-block}}
+}
+...{{/code-block}}
             {{#code-block language='handlebars'}}\{{intl-tel-input
   defaultCountry="auto"
   geoIpLookup=geoIpLookupFunc}}{{/code-block}}
@@ -211,17 +213,17 @@ geoIpLookupFunc: function(callback) {
       <section id="credits">
         <h1><span class="flow-text">Credits</span></h1>
         <hr />
-        <p>This is a wrapper library. It simply wraps the API of the <a href="http://jackocnr.com/intl-tel-input.html">original jQuery plugin</a> created by <a href="http://jackocnr.com/">Jack O'Connor</a> into an <a href="http://emberjs.com/">Ember.js</a> component.</p>
+        <p>This is a wrapper library. It simply wraps the API of the <a href="http://jackocnr.com/intl-tel-input.html" target="_blank">original jQuery plugin</a> created by <a href="http://jackocnr.com/" target="_blank">Jack O'Connor</a> into an <a href="http://emberjs.com/" target="_blank">Ember.js</a> component.</p>
         <p>The original jQuery plugin also depends on several other open-source libraries:</p>
         <ul class="list">
-          <li>Flag images from <a href="https://github.com/behdad/region-flags">region-flags</a></li>
-          <li>Original country data from mledoze's <a href="https://github.com/mledoze/countries">World countries in JSON, CSV and XML</a></li>
-          <li>Formatting/validation/example number code from Google's <a href="https://github.com/googlei18n/libphonenumber">libphonenumber</a></li>
-          <li>Lookup user's country using <a href="http://ipinfo.io/">ipinfo.io</a></li>
+          <li>Flag images from <a href="https://github.com/behdad/region-flags" target="_blank">region-flags</a></li>
+          <li>Original country data from mledoze's <a href="https://github.com/mledoze/countries" target="_blank">World countries in JSON, CSV and XML</a></li>
+          <li>Formatting/validation/example number code from Google's <a href="https://github.com/googlei18n/libphonenumber" target="_blank">libphonenumber</a></li>
+          <li>Lookup user's country using <a href="http://ipinfo.io/" target="_blank">ipinfo.io</a></li>
         </ul>
-        <p><s>This demo page uses <a href="http://www.telize.com/">Telize</a> for a fast, SSL-supported, and FREE Geo IP service.</s></p>
-        <p><a href="http://www.cambus.net/adventures-in-running-a-free-public-api/">Telize no longer provides free services due to heavy abuse</a>. This demo page is now using <a href="http://ipinfo.io">ipinfo.io</a> instead.</p>
-        <p>The layout and color theme of this very documentation page comes from Twitter's <a href="http://getbootstrap.com/">Bootstrap</a> and <a href="http://emberjs.com/">Ember.js</a>, respectively.</p>
+        <p><s>This demo page uses <a href="http://www.telize.com/" target="_blank">Telize</a> for a fast, SSL-supported, and FREE Geo IP service.</s></p>
+        <p><a href="http://www.cambus.net/adventures-in-running-a-free-public-api/" target="_blank">Telize no longer provides free services due to heavy abuse</a>. This demo page is now using <a href="http://ipinfo.io" target="_blank">ipinfo.io</a> instead.</p>
+        <p>The layout and color theme of this very documentation page comes from Twitter's <a href="http://getbootstrap.com/" target="_blank">Bootstrap</a> and <a href="http://emberjs.com/" target="_blank">Ember.js</a>, respectively.</p>
       </section>{{!-- /#about --}}
 
     </main>
