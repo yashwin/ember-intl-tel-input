@@ -7,6 +7,7 @@ const defaultsDeep = require('lodash.defaultsdeep');
 const SassCompiler = require('broccoli-sass-source-maps');
 const createFile = require('broccoli-file-creator');
 const chalk = require('chalk');
+const EmberApp = require('ember-cli/lib/broccoli/ember-app');
 
 const log = (message) => {
   return chalk.dim('[ember-intl-tel-input]') + ': ' + message;
@@ -51,7 +52,7 @@ const defaultOptions = {
   }
 };
 
-const variablesToExport = ['includeUtilsScript', 'utilsScript'];
+let variablesToExport = ['includeUtilsScript', 'utilsScript'];
 
 module.exports = {
   name: 'ember-intl-tel-input',
@@ -60,6 +61,7 @@ module.exports = {
     this._super.included.apply(this, arguments);
 
     let target = (parentAddon || app);
+    let isTesting = EmberApp.env() === 'test';
     let options = target.options['ember-intl-tel-input'];
 
     this._options = defaultsDeep(options, defaultOptions);
@@ -81,13 +83,19 @@ module.exports = {
     this._scssString = this.createScssStringWithVariables(this._options.cssVariables);
     this._shouldBuildCss = this._scssString !== null;
 
+    if (isTesting) {
+      variablesToExport = [];
+    }
+
     this._jsOptionsString = this.createJsOptionsString(this._options);
     this._jsOptionsFilename = 'ember-intl-tel-input/variables.js';
 
     if (this._options.includeUtilsScript) {
-      target.import('vendor/intl-tel-input/js/utils.js', {
-        outputFile: this._options.utilsScript
-      });
+      let outputFile = this._options.utilsScript
+      if (isTesting) {
+        outputFile = undefined;
+      }
+      target.import('vendor/intl-tel-input/js/utils.js', { outputFile });
     }
 
     target.import(`vendor/${this._jsOptionsFilename}`);
@@ -120,11 +128,18 @@ module.exports = {
   },
 
   createJsOptionsString(options) {
-    let fileString = 'window.emberIntlTelInputConfig={';
+    let fileString = 'emberIntlTelInputConfig={';
+    let remove = false;
     variablesToExport.forEach((variable) => {
-      fileString += `${variable}:${JSON.stringify(options[variable])},`;
+      let option = options[variable];
+      if (option) {
+        remove = true;
+        fileString += `${variable}:${JSON.stringify(option)},`;
+      }
     });
-    fileString = fileString.substr(0, fileString.length - 1);
+    if (remove) {
+      fileString = fileString.substr(0, fileString.length - 1);
+    }
     fileString += '};'
     return fileString;
   },
