@@ -1,4 +1,4 @@
-# ember-intl-tel-input
+# ember-intl-tel-input2
 
 [![Build Status](https://travis-ci.org/cdatehortuab/ember-intl-tel-input.svg?branch=master)](https://travis-ci.org/cdatehortuab/ember-intl-tel-input)
 [![npm version](https://badge.fury.io/js/ember-intl-tel-input2.svg)](http://badge.fury.io/js/ember-intl-tel-input2)
