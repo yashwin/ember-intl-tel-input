@@ -12,16 +12,6 @@ export default TextField.extend({
   attributeBindings: ['type'],
   type: 'tel',
 
-  init() {
-    this._super(...arguments);
-    const config = emberIntlTelInputConfig;
-    if (config && (config.utilsScript || config.includeUtilsScript)) {
-      this.set('utilsScript', config.utilsScript || 'assets/intl-tel-input/js/utils.js');
-    } else {
-      this.set('utilsScript', '');
-    }
-  },
-
   /**
    * Whether or not to allow the dropdown. If disabled, there is no dropdown arrow,
    * and the selected flag is not clickable. Also we display the selected flag on
@@ -323,6 +313,16 @@ export default TextField.extend({
     },
     set() { /* no-op */ }
   }),
+
+  init() {
+    this._super(...arguments);
+    const config = emberIntlTelInputConfig;
+    if (config && (config.utilsScript || config.includeUtilsScript)) {
+      this.set('utilsScript', config.utilsScript || 'assets/intl-tel-input/js/utils.js');
+    } else {
+      this.set('utilsScript', '');
+    }
+  },
 
   /**
    * Returns whether the untilities script presents.
