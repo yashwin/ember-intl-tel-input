@@ -7,6 +7,7 @@ const defaultsDeep = require('lodash.defaultsdeep');
 const SassCompiler = require('broccoli-sass-source-maps');
 const createFile = require('broccoli-file-creator');
 const chalk = require('chalk');
+const EmberApp = require('ember-cli/lib/broccoli/ember-app');
 
 const log = (message) => {
   return chalk.dim('[ember-intl-tel-input]') + ': ' + message;
@@ -18,6 +19,7 @@ const warn = (message) => {
 
 const defaultOptions = {
   includeUtilsScript: false,
+  utilsScript: 'assets/intl-tel-input/js/utils.js',
   exportFlagsImages: true,
   cssVariables: {
     hoverColor: null,
@@ -50,20 +52,24 @@ const defaultOptions = {
   }
 };
 
+let variablesToExport = ['includeUtilsScript', 'utilsScript'];
+
 module.exports = {
   name: 'ember-intl-tel-input',
 
   included(app, parentAddon) {
     this._super.included.apply(this, arguments);
-    let target = (parentAddon || app);
 
+    let target = (parentAddon || app);
+    let isTesting = EmberApp.env() === 'test';
     let options = target.options['ember-intl-tel-input'];
 
     this._options = defaultsDeep(options, defaultOptions);
 
     if (this._options.exportFlagsImages) {
       if (this._options.cssVariables.flagsImageName || this._options.cssVariables.flagsImageExtension) {
-        console.warn(warn(`${chalk.bold("cssVariables.flagsImageName")} and ${chalk.bold("cssVariables.flagsImageExtension")} options will be ignored due ${chalk.bold("exportFlagsImages")} is ${chalk.green("true")}`));
+        this.ui.writeLine(warn(`${chalk.bold("cssVariables.flagsImageName")} and ${chalk.bold("cssVariables.flagsImageExtension")}
+         options will be ignored due ${chalk.bold("exportFlagsImages")} is ${chalk.green("true")}`));
       }
       this._options.cssVariables.flagsImageName = null;
       this._options.cssVariables.flagsImageExtension = null;
@@ -77,16 +83,29 @@ module.exports = {
     this._scssString = this.createScssStringWithVariables(this._options.cssVariables);
     this._shouldBuildCss = this._scssString !== null;
 
-    if (this._options.includeUtilsScript) {
-      target.import('vendor/intl-tel-input/js/utils.js');
+    if (isTesting) {
+      variablesToExport = [];
     }
+
+    this._jsOptionsString = this.createJsOptionsString(this._options);
+    this._jsOptionsFilename = 'ember-intl-tel-input/variables.js';
+
+    if (this._options.includeUtilsScript) {
+      let outputFile = this._options.utilsScript
+      if (isTesting) {
+        outputFile = undefined;
+      }
+      target.import('vendor/intl-tel-input/js/utils.js', { outputFile });
+    }
+
+    target.import(`vendor/${this._jsOptionsFilename}`);
 
     target.import({
       development: 'vendor/intl-tel-input/js/intlTelInput.js',
       production: 'vendor/intl-tel-input/js/intlTelInput.min.js'
     });
 
-    target.import('vendor/intl-tel-input/css/intlTelInput.css')
+    target.import('vendor/intl-tel-input/css/intlTelInput.css');
   },
 
   createScssStringWithVariables(cssVariables) {
@@ -108,6 +127,23 @@ module.exports = {
     }
   },
 
+  createJsOptionsString(options) {
+    let fileString = 'emberIntlTelInputConfig={';
+    let remove = false;
+    variablesToExport.forEach((variable) => {
+      let option = options[variable];
+      if (option) {
+        remove = true;
+        fileString += `${variable}:${JSON.stringify(option)},`;
+      }
+    });
+    if (remove) {
+      fileString = fileString.substr(0, fileString.length - 1);
+    }
+    fileString += '};'
+    return fileString;
+  },
+
   treeForVendor(vendorTree) {
     let trees = [];
     if (vendorTree) {
@@ -119,6 +155,8 @@ module.exports = {
       include: [/js\/.*\.js$/],
     });
     trees.push(intlTelInputJsTree);
+
+    trees.push(createFile(this._jsOptionsFilename, this._jsOptionsString));
 
     let intlTelInputCssTree;
     if (this._shouldBuildCss) {
