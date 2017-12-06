@@ -1,7 +1,9 @@
+/* global emberIntlTelInputConfig */
+
 import { moduleForComponent, test } from 'ember-qunit';
 import wait from 'ember-test-helpers/wait';
 import sinon from 'sinon';
-import Ember from 'ember';
+import { run } from '@ember/runloop';
 import jQuery from 'jquery';
 
 moduleForComponent('intl-tel-input', 'Unit | Component | intl-tel-input', {
@@ -37,39 +39,47 @@ test('setupIntlTelInput', function(assert) {
   assert.ok(jQuery.fn.intlTelInput.called, 'intlTelInput called');
 });
 
-test('properties', function(assert) {
+test('properties binded to plugin', function(assert) {
   assert.expect(1);
 
   var component = this.subject();
   component.setProperties({
-    allowExtensions: 'allow extensions',
-    autoFormat: 'auto format',
+    allowDropdown: 'allow dropdown',
     autoHideDialCode: 'auto hide dial code',
     autoPlaceholder: 'auto placeholder',
-    defaultCountry: 'us',
+    customPlaceholder: 'custom placeholder',
+    dropdownContainer: 'dropdown container',
+    excludeCountries: ['co', 'es'],
+    formatOnDisplay: 'format on display',
     geoIpLookup: 'geo ip lookup',
+    initialCountry: 'us',
     nationalMode: 'national mode',
     numberType: 'MOBILE',
     onlyCountries: ['us'],
-    preferredCountries: ['us']
+    preferredCountries: ['us'],
+    separateDialCode: 'separate dial code'
   });
 
   this.render();
 
-  assert.deepEqual({
-      allowExtensions: 'allow extensions',
-      autoFormat: 'auto format',
+  assert.deepEqual(jQuery.fn.intlTelInput.args[0][0], {
+      allowDropdown: 'allow dropdown',
       autoHideDialCode: 'auto hide dial code',
       autoPlaceholder: 'auto placeholder',
-      defaultCountry: 'us',
+      customPlaceholder: 'custom placeholder',
+      dropdownContainer: 'dropdown container',
+      excludeCountries: ['co', 'es'],
+      formatOnDisplay: 'format on display',
       geoIpLookup: 'geo ip lookup',
+      initialCountry: 'us',
       nationalMode: 'national mode',
       numberType: 'MOBILE',
+      placeholderNumberType: 'MOBILE',
       onlyCountries: ['us'],
-      preferredCountries: ['us']
-    },
-    jQuery.fn.intlTelInput.args[0][0],
-    'intlTelInput called with arguments');
+      preferredCountries: ['us'],
+      separateDialCode: 'separate dial code',
+      utilsScript: emberIntlTelInputConfig.utilsScript || ''
+    }, 'intlTelInput called with arguments');
 });
 
 test('it syncs the component value to the input value', function(assert) {
@@ -78,7 +88,7 @@ test('it syncs the component value to the input value', function(assert) {
   var component = this.subject();
   this.render();
 
-  Ember.run(() => {
+  run(() => {
     component.set('value', 'old value');
   });
 
@@ -86,7 +96,7 @@ test('it syncs the component value to the input value', function(assert) {
 
   assert.equal(el.val(), 'old value');
 
-  Ember.run(() => {
+  run(() => {
     el.val('new value');
     el.change();
   });
@@ -101,10 +111,13 @@ test('isValidNumber', function(assert) {
   assert.expect(1);
 
   var component = this.subject();
+  component.set('initialCountry', 'us');
   component.set('value', '12065555555');
   this.render();
 
-  assert.ok(component.get('isValidNumber'), 'isValidNumber');
+  return wait().then(() => {
+    assert.ok(component.get('isValidNumber'), 'isValidNumber');
+  });
 });
 
 test('selectedCountryData', function(assert) {
@@ -112,7 +125,7 @@ test('selectedCountryData', function(assert) {
 
   var component = this.subject();
   component.set('onlyCountries', ['us']);
-  component.set('defaultCountry', 'us');
+  component.set('initialCountry', 'us');
   this.render();
 
   assert.deepEqual(component.get('selectedCountryData'), {
@@ -128,7 +141,7 @@ test('extension', function(assert) {
   assert.expect(1);
 
   var component = this.subject();
-  component.set('numberFormat', 'E14');
+  component.set('numberFormat', 'E164');
   component.set('value', '+12065555555 ext. 12345');
   this.render();
 
@@ -139,9 +152,12 @@ test('number', function(assert) {
   assert.expect(1);
 
   var component = this.subject();
-  component.set('numberFormat', 'E14');
+  component.set('initialCountry', 'us');
+  component.set('numberFormat', 'E164');
   component.set('value', '1 206 555 5555 ext. 12345');
   this.render();
 
-  assert.equal(component.get('number'), '+1206555555512345');
+  return wait().then(() => {
+    assert.equal(component.get('number'), '+12065555555');
+  });
 });

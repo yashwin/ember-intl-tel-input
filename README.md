@@ -1,20 +1,21 @@
-# ember-intl-tel-input
+# ember-intl-tel-input2
 
-[![Build Status](https://travis-ci.org/justin-lau/ember-intl-tel-input.svg?branch=master)](https://travis-ci.org/justin-lau/ember-intl-tel-input)
-[![npm version](https://badge.fury.io/js/ember-intl-tel-input.svg)](http://badge.fury.io/js/ember-intl-tel-input)
-[![Dependency Status](https://david-dm.org/justin-lau/ember-intl-tel-input.svg)](https://david-dm.org/justin-lau/ember-intl-tel-input)
-[![devDependency Status](https://david-dm.org/justin-lau/ember-intl-tel-input/dev-status.svg)](https://david-dm.org/justin-lau/ember-intl-tel-input#info=devDependencies)
+[![Build Status](https://travis-ci.org/cdatehortuab/ember-intl-tel-input.svg?branch=master)](https://travis-ci.org/cdatehortuab/ember-intl-tel-input)
+[![npm version](https://badge.fury.io/js/ember-intl-tel-input2.svg)](http://badge.fury.io/js/ember-intl-tel-input2)
+[![Dependency Status](https://david-dm.org/cdatehortuab/ember-intl-tel-input.svg)](https://david-dm.org/cdatehortuab/ember-intl-tel-input)
+[![devDependency Status](https://david-dm.org/cdatehortuab/ember-intl-tel-input/dev-status.svg)](https://david-dm.org/cdatehortuab/ember-intl-tel-input#info=devDependencies)
 
 An Ember.js addon for entering and validating international telephone numbers.
+This project is a fork of [justin-lau/ember-intl-tel-input](https://github.com/justin-lau/ember-intl-tel-input) that is outdated.
 
-Please check out the [demo page](http://justin-lau.github.io/ember-intl-tel-input/) to see the addon in action.
+Please check out the [demo page](http://cdatehortuab.github.io/ember-intl-tel-input/) to see the addon in action.
 
 For more information on using ember-cli, visit [http://www.ember-cli.com/](http://www.ember-cli.com/).
 
 ## Installation
 
 ```bash
-$ ember install ember-intl-tel-input
+$ ember install ember-intl-tel-input2
 ```
 
 ## Basic Usage
@@ -33,18 +34,36 @@ The component derives from `Ember.TextField`, anything you can do with the input
 
 ## With Utilities Script
 
-With the [utilities script](https://github.com/Bluefieldscom/intl-tel-input#utilities-script) included, the `autoFormat` and `autoPlaceholder` options are automatically enabled.
+With the [utilities script](https://github.com/jackocnr/intl-tel-input#utilities-script) included, the `autoPlaceholder` option is automatically enabled.
 
 ```javascript
 // ember-cli-build.js
 module.exports = function(defaults) {
-  var app = new EmberAddon(defaults, {
-    intlTelInput: {
+  let app = new EmberApp(defaults, {
+    ...
+    'ember-intl-tel-input': {
       includeUtilsScript: true, // default to false
     },
+    ...
   });
+  ...
 };
 ```
+Or if you want to specify your own compatible utils script (like a custom build).
+```javascript
+// ember-cli-build.js
+module.exports = function(defaults) {
+  let app = new EmberApp(defaults, {
+    ...
+    'ember-intl-tel-input': {
+      utilsScript: 'path/to/utilsScript.js',
+    },
+    ...
+  });
+  ...
+};
+```
+If you use both options the default utilsScript will be exported to the path specified.
 
 ```htmlbars
 {{intl-tel-input}}
@@ -54,13 +73,13 @@ module.exports = function(defaults) {
 
 Use the following properties for binding:
 
-* `value` for input value
-* `selectedCountryData` for data of the currently selected country
-* `number` for formatted phone number
-* `extension` for the extension part of the number
-* `numberType` for the type of the current number
-* `isValidNumber` for the validity of the number
-* `validationError` for information about a validation error
+*   `value` for input value
+*   `selectedCountryData` for data of the currently selected country
+*   `number` for formatted phone number
+*   `extension` for the extension part of the number
+*   `numberType` for the type of the current number
+*   `isValidNumber` for the validity of the number
+*   `validationError` for information about a validation error
 
 ```htmlbars
 {{intl-tel-input
@@ -75,13 +94,13 @@ Use the following properties for binding:
 ```
 
 ## Lookup User's Country
-`intl-tel-input` provides a convenient way to look up the user's country based on their IP addresses. This example uses [Telize](http://www.telize.com/) for demonstration.
+`intl-tel-input` provides a convenient way to look up the user's country based on their IP addresses. This example uses [ipinfo.io](http://ipinfo.io/) for demonstration.
 
 ```javascript
 // controller
-
+...
 geoIpLookupFunc: function(callback) {
-  $.getJSON('//www.telize.com/geoip')
+  $.getJSON('http://ipinfo.io/')
    .always(function(resp) {
      if (!resp || !resp.country_code) {
        callback('');
@@ -90,17 +109,18 @@ geoIpLookupFunc: function(callback) {
      callback(resp.country_code);
    });
 }
+...
 ```
 
 ```htmlbars
 {{intl-tel-input
-  defaultCountry="auto"
+  initialCountry="auto"
   geoIpLookup=geoIpLookupFunc}}
 ```
 
 ## Running The Demo Page Locally
 
-Run `ember server`, and visit the demo page at http://localhost:4200.
+Run `ember server`, and visit the demo page at `http://localhost:4200`.
 
 ## Credits
 
@@ -108,12 +128,12 @@ This is a wrapper library. It simply wraps the API of [the original jQuery plugi
 
 The original jQuery plugin also depends on several other open-source libraries:
 
-* Flag images from region-flags
-* Original country data from mledoze's World countries in JSON, CSV and XML
-* Formatting/validation/example number code from Google's libphonenumber
-* Lookup user's country using ipinfo.io
+*   Flag images from region-flags
+*   Original country data from mledoze's World countries in JSON, CSV and XML
+*   Formatting/validation/example number code from Google's libphonenumber
+*   Lookup user's country using ipinfo.io
 
-~~This [addon's demo page](http://justin-lau.github.io/ember-intl-tel-input/) uses [Telize](http://www.telize.com/) for a fast, SSL-supported, yet FREE Geo IP service.~~
+~~This [addon's demo page](http://cdatehortuab.github.io/ember-intl-tel-input/) uses [Telize](http://www.telize.com/) for a fast, SSL-supported, yet FREE Geo IP service.~~
 
 [Telize no longer provide free services due to heavy abuse](http://www.cambus.net/adventures-in-running-a-free-public-api/). The demo has switched over to [ipinfo.io](http://ipinfo.io).
 
