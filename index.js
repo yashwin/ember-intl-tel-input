@@ -150,7 +150,7 @@ module.exports = {
       trees.push(vendorTree);
     }
 
-    let intlTelInputJsTree = new Funnel(`${this.nodeModulesPath}/intl-tel-input/build`, {
+    let intlTelInputJsTree = new Funnel('node_modules/intl-tel-input/build', {
       destDir: 'intl-tel-input',
       include: [/js\/.*\.js$/],
     });
@@ -162,12 +162,12 @@ module.exports = {
     if (this._shouldBuildCss) {
       let scssBaseFilename = '/styles/base.scss';
       let intlTelInputScssSrcTrees = [
-        new Funnel(`${this.nodeModulesPath}/intl-tel-input/src/css`),
+        new Funnel('node_modules/intl-tel-input/src/css'),
         createFile(scssBaseFilename, this._scssString)
       ];
       intlTelInputCssTree = new SassCompiler(intlTelInputScssSrcTrees, scssBaseFilename, 'intl-tel-input/css/intlTelInput.css');
     } else {
-      intlTelInputCssTree = new Funnel(`${this.nodeModulesPath}/intl-tel-input/build`, {
+      intlTelInputCssTree = new Funnel('node_modules/intl-tel-input/build', {
         destDir: 'intl-tel-input',
         include: [/css\/.*\.css$/],
         exclude: ['demo.css']
@@ -186,7 +186,7 @@ module.exports = {
     if (this._options.exportFlagsImages) {
       let flagsImagePath = `assets/${this._options.cssVariables.flagsImagePath || '../img/'}`;
       flagsImagePath = flagsImagePath.replace(/"|'/g, '');
-      let imagesTree = new Funnel(`${this.nodeModulesPath}/intl-tel-input/build/img`, {
+      let imagesTree = new Funnel('node_modules/intl-tel-input/build/img', {
         destDir: flagsImagePath
       });
       trees.push(imagesTree);
