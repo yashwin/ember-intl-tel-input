@@ -1,7 +1,7 @@
 {
   "name": "ember-intl-tel-input2",
-  "version": "2.0.0",
-  "description": "The default blueprint for ember-cli addons.",
+  "version": "2.0.1",
+  "description": "An Ember.js addon for entering and validating international telephone numbers.",
   "keywords": [
     "ember-addon",
     "intl-tel-input",
