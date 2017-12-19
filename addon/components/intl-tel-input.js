@@ -318,14 +318,18 @@ export default TextField.extend({
     this._super(...arguments);
     const config = emberIntlTelInputConfig;
     if (config && (config.utilsScript || config.includeUtilsScript)) {
-      this.set('utilsScript', config.utilsScript || 'assets/intl-tel-input/js/utils.js');
+      let utilsScript = config.utilsScript || '/assets/intl-tel-input/js/utils.js';
+      if (utilsScript.charAt(0) !== '/') {
+        utilsScript = `/${utilsScript}`;
+      }
+      this.set('utilsScript', utilsScript);
     } else {
       this.set('utilsScript', '');
     }
   },
 
   /**
-   * Returns whether the untilities script presents.
+   * Returns whether the utilities script is present or not.
    *
    * @method hasUtilsScript
    * @return `true` if utilities scripts is present, `false` if not
