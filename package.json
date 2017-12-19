@@ -1,6 +1,6 @@
 {
   "name": "ember-intl-tel-input2",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "An Ember.js addon for entering and validating international telephone numbers.",
   "keywords": [
     "ember-addon",
