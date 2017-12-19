@@ -4,7 +4,7 @@ import $ from 'jquery';
 export default Controller.extend({
 
   geoIpLookupFunc: function(callback) {
-    $.getJSON('http://ipinfo.io/')
+    $.getJSON('https://ipinfo.io/')
      .always(function(resp) {
        if (!resp || !resp.country) {
          callback('');
