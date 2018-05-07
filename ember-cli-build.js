@@ -27,7 +27,7 @@ module.exports = function(defaults) {
     },
 
     'ember-intl-tel-input': {
-      includeUtilsScript: true
+      includeUtilsScript: false
     },
   });
 
